@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Rolling Stone Top 500 albums of all time</title>
+  <meta name="description" content="Rolling Stone magazine's 2012 list of 500 greatest albums of all time with genres.">
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">-->
+
+<!--<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.5/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.11.5/datatables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+{% if user.is_authenticated %}
+  <div class="container">
+
+<h1>Bootstrap Upload Form demo</h1>
+    <form class="form-horizontal" role="form" action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name:</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control inputstl" id="name" name="name" placeholder="Enter Your Full Name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gender" class="col-sm-2 control-label">Gender:</label>
+        <div class="col-sm-2">
+        <select class="form-control inputstl" id="gender" name="gender">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email" class="col-sm-2 control-label">Email:</label>
+        <div class="col-sm-5">
+          <input type="email" class="form-control inputstl" id="email" name="email" placeholder="Enter Email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="selphoto" class="col-sm-2 control-label">Select a File to upload:</label>
+        <div class="col-sm-5">
+          <input type="file" class="inputstl" id="selphoto" name="sentfile">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-4">
+          <button type="submit" class="btn btn-lg btn-block btn-primary">Create Account</button>
+        </div>
+      </div>
+    </form>
+
+
+
+    <table id="sample" class="display cell-border compact hover table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Download File</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody>
+    {% for item in data %}
+    <tr>
+        <td>{{item.id}}</td>
+            <td>{{ item.name }}</td>
+        <td>{{ item.gender }}</td>
+         <td>{{ item.email }}</td>
+        <td><a href="{{ item.file.url }}">Download</a></td>
+        <td><span><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalContactForm">update</button></span><span><button type="button" class="btn btn-primary">delete</button></span></td>
+    </tr>
+
+
+
+    {% endfor %}
+        </tbody>
+        </table>
+
+
+
+</div>
+
+  <!--<script src="https://code.jquery.com/jquery-3.5.1.js"></script>-->
+  <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <!--<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>-->
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          $('#sample').DataTable();
+      });
+  </script>
+
+<a href="{% url 'logout' %}">Logout</a>
+{% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="modalContactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Write to us</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-user prefix grey-text"></i>
+          <input type="text" id="form34" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="form34">Your name</label>
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="form29" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="form29">Your email</label>
+        </div>
+
+        <div class="md-form mb-5">
+          <i class="fas fa-tag prefix grey-text"></i>
+          <input type="text" id="form32" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="form32">Subject</label>
+        </div>
+
+        <div class="md-form">
+          <i class="fas fa-pencil prefix grey-text"></i>
+          <textarea type="text" id="form8" class="md-textarea form-control" rows="4"></textarea>
+          <label data-error="wrong" data-success="right" for="form8">Your message</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-unique">Send <i class="fas fa-paper-plane-o ml-1"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

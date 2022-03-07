@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+.inputstl {
+    padding: 9px;
+    border: solid 1px #173955;
+    outline: 0;
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #AACCE8), to(#FFFFFF));
+    background: -moz-linear-gradient(top, #FFFFFF, #AACCE8 1px, #FFFFFF 25px);
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+     -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+
+    }
+
+</style>
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function() {
+$('#sample').DataTable();
+});
+</script>
+
+
+</head>
+
+<body>
+<div class="container">
+<h1>Bootstrap Upload Form demo</h1>
+    <form class="form-horizontal" role="form" action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name:</label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control inputstl" id="name" name="name" placeholder="Enter Your Full Name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gender" class="col-sm-2 control-label">Gender:</label>
+        <div class="col-sm-2">
+        <select class="form-control inputstl" id="gender" name="gender">
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email" class="col-sm-2 control-label">Email:</label>
+        <div class="col-sm-5">
+          <input type="email" class="form-control inputstl" id="email" name="email" placeholder="Enter Email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="selphoto" class="col-sm-2 control-label">Select a File to upload:</label>
+        <div class="col-sm-5">
+          <input type="file" class="inputstl" id="selphoto" name="sentfile">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-4">
+          <button type="submit" class="btn btn-lg btn-block btn-primary">Create Account</button>
+        </div>
+      </div>
+    </form>
+
+
+    <div>
+    <table id="sample" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Email</th>
+                <th>Download File</th>
+
+            </tr>
+        </thead>
+        <tbody>
+    {% for item in data %}
+    <tr>
+            <td><li>{{ item.name }}</li></td>
+        <td><li>{{ item.gender }}</li></td>
+         <td><li>{{ item.email }}</li></td>
+        <td><li><a href="{{ item.file.url }}">Download</a></li></td>
+
+    </tr>
+
+
+
+    {% endfor %}
+        </tbody>
+        </table>
+     </div>
+
+
+</div>
+
+
+<script>
+			$('#selphoto').filestyle({
+				buttonName : 'btn-primary',
+                buttonText : ' Upload an Image',
+                iconName : 'glyphicon glyphicon-upload'
+			});
+</script>
+</body>
+</html>
