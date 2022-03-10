@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate,login, logout
 from django.contrib.auth.forms import AuthenticationForm
-
+from django.shortcuts import get_object_or_404
 
 
 class Home(View):
@@ -69,3 +69,11 @@ def update(request):
 
 def delete(request):
     return redirect('/home')
+
+
+def getdata(request, id=None):
+    instance = get_object_or_404(MyDB, id=id)
+    context = {
+        'instance': instance
+    }
+    return render(request, 'home1.html', context)
