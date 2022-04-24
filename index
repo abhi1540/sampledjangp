@@ -1,0 +1,159 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Hello World Java EE</title>
+
+    <script src="https://cdn.anychart.com/releases/8.8.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.8.0/js/anychart-graph.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.8.0/js/anychart-data-adapter.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+    <style type="text/css">
+      html, body, #container {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  
+  
+    
+    
+  </head>
+  <body>
+    <div id="container"></div>
+    
+   
+    <input type="text" id="name" name="name" /><br/>
+    <input type="button" value="Click me" onclick="return callservlet();"/>
+
+    <script>
+     
+     function callservlet() {
+    	 $.ajax({
+    		 url     : 'ExampleServlet',
+    		 method     : 'POST',
+    		 data     : {name : name},
+    		 success    : function(resultText){
+    			
+    			 var data = resultText;
+    			// create a chart from the loaded data
+    	          var chart = anychart.graph(resultText);
+    	       
+    	          // set the title
+    	          chart.title("Network Graph showing the battles in Game of Thrones");
+
+    	          // access nodes
+    	          var nodes = chart.nodes();
+
+    	          // set the size of nodes
+    	          nodes.normal().height(30);
+    	          nodes.hovered().height(45);
+    	          nodes.selected().height(45);
+
+    	          // set the stroke of nodes
+    	          nodes.normal().stroke(null);
+    	          nodes.hovered().stroke("#333333", 3);
+    	          nodes.selected().stroke("#333333", 3);
+
+    	          // enable the labels of nodes
+    	          chart.nodes().labels().enabled(true);
+
+    	          // configure the labels of nodes
+    	          chart.nodes().labels().format("{%id}");
+    	          chart.nodes().labels().fontSize(12);
+    	          chart.nodes().labels().fontWeight(600);
+    	          $("#container").empty();
+    	          // draw the chart
+    	          chart.container("container").draw();
+    		 },
+    		 error : function(jqXHR, exception){
+    		 console.log('Error occured!!');
+    		 }
+    		 });
+
+
+          
+
+
+     }
+
+    </script>
+</body>
+</html>
+
+
+############################################################################ SErvlet #######################################
+
+
+package net.codejava.javaee;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class ExampleServlet
+ */
+@WebServlet("/ExampleServlet")
+public class ExampleServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ExampleServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//parsing a CSV file into Scanner class constructor  
+		String jsondata = "";
+		Scanner sc = new Scanner(new File("G:\\Machine Learning\\DASH_PYTHON\\graphdata.csv"));  
+		sc.useDelimiter(",");   //sets the delimiter pattern  
+		while (sc.hasNext())  //returns a boolean value  
+		{  
+			jsondata += sc.next();  //find and returns the next complete token from this scanner  
+		}   
+		sc.close();  //closes the scanner
+		
+		String jsondata1 = "{ \"nodes\": [\r\n"
+				+ "					    { \"id\": 1, \"name\": \"A\" },\r\n"
+				+ "					    { \"id\": 2, \"name\": \"B\" }\r\n"
+				+ "					  ],\r\n"
+				+ "					  \"edges\": [\r\n"
+				+ "					    { \"from\": 1, \"to\": 2 }\r\n"
+				+ "					  ]}";
+
+		String name = request.getParameter("name");
+		System.out.println(name);
+		response.setContentType("application/json");
+		response.getWriter().print(jsondata1);
+
+		
+	}
+
+}
+
